@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qubin.mybatis.mapper.StudentMapper">
+
+    <resultMap id="student" type="Student">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <association property="studentClass" javaType="StudentClass" resultMap="com.qubin.mybatis.mapper.StudentClassMapper.student_class" columnPrefix="sc_"/>
+        <collection property="teachers" javaType="ArrayList" ofType="Teacher" columnPrefix="t_">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </collection>
+    </resultMap>
+
+    <sql id="select">
+        select s.*,sc.id sc_id,sc.name sc_name,t.id t_id,t.name t_name
+                 from student s
+                 left join studentclass sc on s.class_id=sc.id
+                 left join stu_teac st on s.id=st.stu_id
+                 left join teacher t on st.teac_id=t.id
+    </sql>
+
+    <select id="selectAllStuInFo" resultMap="student">
+        <include refid="select"/>
+    </select>
+
+    <select id="selectStudentByOfLikeName" resultMap="student">
+        <include refid="select"/>
+          where s.name like concat('%',#{name},'%')
+    </select>
+
+    <update id="updateStudentById" parameterType="Student">
+        update student
+        <set>
+          <if test="name !=null and name!=''">name=#{name},</if>
+          <if test="studentClass !=null and studentClass.id !=null and studentClass.id">class_id=#{studentClass.id}</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="selectStudentBySomeInfo" resultMap="student">
+        <include refid="select"/>
+        <where>
+            <if test="id !=null">s.id=#{id}</if>
+            <if test="name !=null and name!=''">and s.name=#{name}</if>
+            <if test="class_id !=null">and s.class_id=#{class_id}</if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <properties resource="jdbc.properties"/>
+    <!--jdbc驱动包绝对地址-->
+    <classPathEntry location="E:\maven\.m2\repository\mysql\mysql-connector-java\8.0.15\mysql-connector-java-8.0.15.jar"/>
+    <context id="DB2Tables" targetRuntime="MyBatis3Simple">
+        <!--公共生成器-->
+        <commentGenerator>
+            <!--是否取消注释-->
+            <property name="suppressAllComments" value="true"/>
+            <!--否将在生成的注释中包含生成时间戳。-->
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+
+        <!--配置数据库连接参数-->
+        <jdbcConnection driverClass="${jdbc.driver}" connectionURL="${jdbc.url}" userId="${jdbc.username}" password="${jdbc.password}">
+            <!--MySQL 8.x 需要指定服务器的时区-->
+            <property name="serverTimezone" value="UTC"/>
+            <!--MySQL 不支持 schema 或者 catalog 所以需要添加这个-->
+            <!--参考 : http://www.mybatis.org/generator/usage/mysql.html-->
+            <property name="nullCatalogMeansCurrent" value="true"/>
+        </jdbcConnection>
+
+        <!--生成模型的包和位置-->
+        <javaModelGenerator targetPackage="com.qubin.mybatis.bean1" targetProject="src\main\java">
+            <!--允许生成子包-->
+            <property name="enableSubPackages" value="true"/>
+            <!--此属性用于选择MyBatis Generator是否添加代码以从数据库返回的字符字段中修剪空白区域-->
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!--生成的映射文件的包和位置-->
+        <sqlMapGenerator targetPackage="mapper1" targetProject="src\main\resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!--生成接口文件的包和位置-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.qubin.mybatis.mapper1" targetProject="src\main\java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!--指定要对哪些表生成对应的实体类及接口和mapper文件-->
+        <table tableName="merchant" domainObjectName="Merchant" schema=""/>
+        <table tableName="goods" domainObjectName="Goods"/>
+        <table tableName="category" domainObjectName="Category"/>
+
+    </context>
+</generatorConfiguration>

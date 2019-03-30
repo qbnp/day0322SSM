@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.qubin</groupId>
+    <artifactId>day0322SSM</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <!--子项目，模块-->
+    <modules>
+        <module>mybatis</module>
+    </modules>
+    <!--配置打包方式:pom,jar,war-->
+    <packaging>pom</packaging>
+    <!--配置属性-->
+    <properties>
+        <!--配置Jdk源码版本-->
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <!--配置编译后的JDK版本-->
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <!--配置编译编码格式-->
+        <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
+        <!--配置版本索引-->
+        <mysql.version>8.0.15</mysql.version>
+        <junit.version>4.12</junit.version>
+        <lombok.version>1.18.6</lombok.version>
+        <tomcat.version>2.2</tomcat.version>
+    </properties>
+
+    <!--声明依赖,不会主动下载,当子模块需要时，引用，才会下载-->
+    <dependencyManagement>
+        <!--导入mysql依赖-->
+        <dependencies>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <!--导入lombok依赖-->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!--全局导入依赖-->
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+        </dependency>
+    </dependencies>
+    <!--在父工程配置tomcat插件-->
+    <build>
+        <plugins>
+            <!--tomcat插件-->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>${tomcat.version}</version>
+                <configuration>
+                    <path>/</path>
+                    <port>80</port>
+                </configuration>
+            </plugin>
+            <!--metageneration插件-->
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>1.3.2</version>
+                <configuration>
+                    <!--是否覆盖-->
+                    <overwrite>true</overwrite>
+                    <!--显示详细信息-->
+                    <verbose>true</verbose>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

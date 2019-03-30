@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间对应mapper接口-->
+<!--对应接口方法不能够重载-->
+<!--id唯一-->
+<mapper namespace="com.qubin.mybatis.mapper.UserMapper">
+
+    <insert id="insert" parameterType="User">
+        insert into user (name, age) VALUES (#{name},#{age})
+    </insert>
+
+    <update id="updateByName" parameterType="User">
+        update user set age=#{age} where name=#{name}
+    </update>
+
+    <delete id="delete" parameterType="string">
+        delete from user where name=#{name}
+    </delete>
+
+    <select id="getUserList" resultType="User">
+        select *from user
+    </select>
+
+    <select id="selectUserByName" resultType="User" parameterType="string">
+        select *from user where name=#{name};
+    </select>
+    
+    <select id="selectForNameAndAge" resultType="map">
+        select name,age from user
+    </select>
+
+</mapper>

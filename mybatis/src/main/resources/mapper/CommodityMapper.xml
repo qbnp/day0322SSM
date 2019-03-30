@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qubin.mybatis.mapper.CommodityMapper">
+
+    <resultMap id="commodity" type="Commodity">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="price" column="price"/>
+        <result property="inventory" column="inventory"/>
+        <association property="category"  javaType="Category" resultMap="com.qubin.mybatis.mapper.CategoryMapper.category" columnPrefix="ca_"/>
+        <association property="merchant"  javaType="Merchant" resultMap="com.qubin.mybatis.mapper.MerchantMapper.merchant" columnPrefix="m_"/>
+    </resultMap>
+
+    <select id="selectAllCommodityByMerchantName" resultMap="commodity" parameterType="string">
+        select c.*,m.id m_id,m.name m_name,m.telephone m_telephone,ca.id ca_id,ca.name ca_name,t.id ca_t_id, t.name ca_t_name from commodity c
+          join merchant m on c.merchant_id=m.id
+          join category ca on c.category_id=ca.id
+          join topcategory t on ca.topCategory_id=t.id
+          where m.name=#{name}
+    </select>
+    
+    <select id="selectAllCommodity" resultType="Commodity">
+        select c.name,c.price,c.inventory from commodity c
+    </select>
+
+    <select id="selectCommodityByCategory" resultMap="commodity">
+        select c.*,ca.id ca_id,ca.name ca_name from commodity c
+        left join category ca on c.category_id=ca.id
+        where ca.name=#{name}
+    </select>
+
+    <insert id="addCommodity" parameterType="Merchant">
+        insert into commodity (name, category_id, merchant_id, price, inventory)                VALUES(#{name},#{category_id},#{merchant_id},#{price},#{inventory})
+    </insert>
+
+    <delete id="deleteCommodityByName" parameterType="string">
+        delete from commodity where name=#{name}
+    </delete>
+
+    <update id="updateCommodityPriceByName">
+        update commodity set price=#{price}
+        where name=#{name}
+    </update>
+
+</mapper>
+

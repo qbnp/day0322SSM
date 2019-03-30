@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qubin.mybatis.mapper1.GoodsMapper" >
+  <resultMap id="BaseResultMap" type="com.qubin.mybatis.bean1.Goods" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="INTEGER" />
+    <result column="stock" property="stock" jdbcType="INTEGER" />
+    <association property="category" javaType="com.qubin.mybatis.bean1.Category" resultMap="com.qubin.mybatis.mapper1.CategoryMapper.BaseResultMap" columnPrefix="ca_"/>
+    <association property="merchant" javaType="com.qubin.mybatis.bean1.Merchant" resultMap="com.qubin.mybatis.mapper1.MerchantMapper.BaseResultMap" columnPrefix="m_"/>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from goods
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.qubin.mybatis.bean1.Goods" >
+    insert into goods (id, name, category,
+      merchant, price, stock
+      )
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{category.id},
+      #{merchant.id}, #{price,jdbcType=INTEGER}, #{stock,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.qubin.mybatis.bean1.Goods" >
+    update goods
+    set name = #{name,jdbcType=VARCHAR},
+      category = #{category.id},
+      merchant = #{merchant.id},
+      price = #{price,jdbcType=INTEGER},
+      stock = #{stock,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+    <sql id="select">
+        g.*,ca.id ca_id,ca.name ca_name,ca.parent ca_parent,m.id m_id, m.name m_name, m.telephone m_telephone
+    </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select <include refid="select"/>
+    from goods
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select <include refid="select"/>
+    from goods g
+           join category ca on g.category = ca.id
+           join merchant m on g.merchant = m.id
+  </select>
+</mapper>

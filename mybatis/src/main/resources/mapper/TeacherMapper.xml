@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qubin.mybatis.mapper.TeacherMapper">
+
+    <resultMap id="teacher" type="Teacher">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <collection property="studentClasses" ofType="StudentClass" resultMap="com.qubin.mybatis.mapper.StudentClassMapper.student_class" columnPrefix="sc_"/>
+        <collection property="students" ofType="Student" columnPrefix="s_">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </collection>
+    </resultMap>
+    <select id="selectAllTeacherInFo" resultMap="teacher">
+        select t.* ,sc.id sc_id,sc.name sc_name,s.id s_id,s.name s_name from teacher t
+        inner join stu_teac st on t.id=st.teac_id
+        inner join student s on st.stu_id=s.id
+        inner join studentclass sc on s.class_id=sc.id
+    </select>
+
+
+
+</mapper>
